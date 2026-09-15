@@ -3,4 +3,9 @@ Repositório dedicado a concepção e estruturação do VigiaSusLocal, Projeto d
 
 ---
 # Integrantes
-@EvandroJneto, @HugooPaixao, @sibeleoliveirac, @S1l45S, @ysrael12
+
+- @EvandroJneto
+- @HugooPaixao
+- @sibeleoliveirac
+- @S1l45S
+- @ysrael12
