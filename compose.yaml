@@ -1,16 +1,23 @@
 services:
   mongodb:
     image: mongo:7.0
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
     restart: unless-stopped
     volumes:
       - mongodb_data:/data/db
     ports:
       - "${MONGODB_PORT:-27017}:27017"
     healthcheck:
-      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand({ ping: 1 })"]
+      test:
+        - CMD-SHELL
+        - >-
+          mongosh --quiet --eval 'try { rs.status(); } catch (e) {
+          rs.initiate({ _id: "rs0", members: [{ _id: 0, host: "localhost:27017" }] });
+          }' >/dev/null 2>&1 &&
+          mongosh --quiet --eval 'db.hello().isWritablePrimary' | grep -q true
       interval: 5s
       timeout: 5s
-      retries: 12
+      retries: 20
       start_period: 10s
 
   app:
@@ -23,7 +30,7 @@ services:
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-local-development-only-change-me}
       DJANGO_DEBUG: ${DJANGO_DEBUG:-True}
       DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-localhost,127.0.0.1}
-      MONGODB_URI: mongodb://mongodb:27017
+      MONGODB_URI: mongodb://mongodb:27017/?directConnection=true
       MONGODB_DATABASE: ${MONGODB_DATABASE:-vigiasus_local}
     depends_on:
       mongodb:
@@ -39,7 +46,7 @@ services:
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-local-test-only-key}
       DJANGO_DEBUG: "False"
       DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
-      MONGODB_URI: mongodb://mongodb:27017
+      MONGODB_URI: mongodb://mongodb:27017/?directConnection=true
       MONGODB_DATABASE: vigiasus_test
     depends_on:
       mongodb:
