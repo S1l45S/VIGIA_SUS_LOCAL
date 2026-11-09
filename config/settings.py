@@ -1,5 +1,4 @@
 import os
-
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -31,6 +30,7 @@ INSTALLED_APPS = [
     'django_mongodb_backend',
     "dominio",
     "ingestao",
+    "deteccao",
 ]
 
 MIDDLEWARE = [

@@ -14,25 +14,34 @@ jobs:
   ci:
     name: Testes e validações
     runs-on: ubuntu-latest
-    services:
-      mongodb:
-        image: mongo:7.0
-        ports:
-          - 27017:27017
-        options: >-
-          --health-cmd "mongosh --quiet --eval 'db.adminCommand({ ping: 1 })'"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
     env:
       DJANGO_SECRET_KEY: ci-only-insecure-key
       DJANGO_DEBUG: "False"
       DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
-      MONGODB_URI: mongodb://localhost:27017
+      MONGODB_URI: mongodb://localhost:27017/?replicaSet=rs0
       MONGODB_DATABASE: vigiasus_ci
     steps:
       - name: Baixar código
         uses: actions/checkout@v4
+
+      - name: Iniciar MongoDB como replica set
+        run: |
+          docker run --detach --name mongodb --publish 27017:27017 mongo:7.0 mongod --replSet rs0 --bind_ip_all
+          for attempt in $(seq 1 30); do
+            if docker exec mongodb mongosh --quiet --eval 'db.adminCommand({ ping: 1 }).ok' | grep -q 1; then
+              break
+            fi
+            sleep 1
+          done
+          docker exec mongodb mongosh --quiet --eval 'rs.initiate({_id: "rs0", members: [{_id: 0, host: "localhost:27017"}]})'
+          for attempt in $(seq 1 30); do
+            if docker exec mongodb mongosh --quiet --eval 'rs.status().ok' 2>/dev/null | grep -q 1; then
+              exit 0
+            fi
+            sleep 1
+          done
+          docker logs mongodb
+          exit 1
 
       - name: Configurar Python
         uses: actions/setup-python@v5
