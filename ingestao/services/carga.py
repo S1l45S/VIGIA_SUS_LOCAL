@@ -1,21 +1,12 @@
-import csv
-
 from django_mongodb_backend import transaction
 
-from ingestao.models import (
-    CargaDeDados,
-    RegistroSemanal,
-)
-
-from dominio.models import (
-    Agravo,
-    Municipio,
-)
-
+from deteccao.services.estatistica import processar_series
+from dominio.models import Agravo, Municipio
+from ingestao.models import CargaDeDados, RegistroSemanal
 from ingestao.services.validacao import (
+    ErroEsquemaCSV,
     validar_estrutura,
     validar_registro,
-    ErroEsquemaCSV,
 )
 
 
@@ -143,8 +134,18 @@ def importar_csv(caminho):
 
                 )
 
-            carga.status = "ACEITA"
+            series_afetadas = {
+                (registro["agravo_codigo"], registro["municipio_codigo"])
+                for registro in registros
+            }
+            for agravo_codigo, municipio_codigo in sorted(series_afetadas):
+                serie = RegistroSemanal.objects.filter(
+                    agravo_codigo=agravo_codigo,
+                    municipio_codigo=municipio_codigo,
+                ).order_by("semana_inicio")
+                processar_series(registros=serie)
 
+            carga.status = "ACEITA"
             carga.save(update_fields=["status"])
 
         return carga

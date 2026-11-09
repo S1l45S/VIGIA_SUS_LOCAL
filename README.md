@@ -198,7 +198,16 @@ A janela de análise prevista para o projeto corresponde a **oito
 semanas**.
 
 Quando o valor observado ultrapassa o limite calculado, o sistema pode
-gerar um alerta de possível anomalia.
+gerar um alerta de possível anomalia. A classificação é estrita (`observado >
+limite`): valores iguais ao limite não são anomalias. Para cada semana avaliada,
+o cálculo utiliza as oito semanas imediatamente anteriores, exigindo nove
+observações na série para classificar a primeira semana. As oito semanas do
+histórico precisam ser consecutivas; janelas com semanas ausentes são ignoradas
+até haver oito semanas consecutivas disponíveis. A média, o desvio padrão
+populacional e a classificação são persistidos na coleção `resultados_deteccao`.
+Após uma carga aceita, as séries de agravo/município afetadas são recalculadas
+na mesma transação da ingestão; falhas na detecção impedem a carga de ser
+marcada como aceita.
 
 > A interpretação dos resultados deve considerar a qualidade dos dados,
 > a sazonalidade, o contexto epidemiológico e a avaliação dos
