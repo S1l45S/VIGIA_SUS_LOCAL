@@ -1,8 +1,8 @@
 # 🛡️ VigiaSUS Local
 
 <p>
-<img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
-<img src="https://img.shields.io/badge/Django-5.1-092E20?style=for-the-badge&logo=django&logoColor=white" alt="Django">
+<img src="https://img.shields.io/badge/Python-3.14%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
+<img src="https://img.shields.io/badge/Django-6.1-092E20?style=for-the-badge&logo=django&logoColor=white" alt="Django">
 <img src="https://img.shields.io/badge/MongoDB-NoSQL-47A248?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB">
 <img src="https://img.shields.io/badge/Status-Em_Desenvolvimento-FFA500?style=for-the-badge" alt="Status: Em desenvolvimento">
 </p>
@@ -50,7 +50,7 @@ análise dos indicadores e na tomada de decisões.
   | Tecnologia    | Aplicação                                   |
   |---------------|---------------------------------------------|
   | Python 3.14+  | Linguagem de programação                    |
-  | Django 6.x    | Framework web e lógica de aplicação         |
+  | Django 6.1    | Framework web e lógica de aplicação         |
   | MongoDB       | Banco de dados NoSQL orientado a documentos |
   | MongoEngine   | ODM para integração com o MongoDB           |
   | Pytest        | Testes automatizados                        |
