@@ -49,8 +49,8 @@ análise dos indicadores e na tomada de decisões.
 
   | Tecnologia    | Aplicação                                   |
   |---------------|---------------------------------------------|
-  | Python 3.10+  | Linguagem de programação                    |
-  | Django 5.x    | Framework web e lógica de aplicação         |
+  | Python 3.14+  | Linguagem de programação                    |
+  | Django 6.x    | Framework web e lógica de aplicação         |
   | MongoDB       | Banco de dados NoSQL orientado a documentos |
   | MongoEngine   | ODM para integração com o MongoDB           |
   | Pytest        | Testes automatizados                        |
