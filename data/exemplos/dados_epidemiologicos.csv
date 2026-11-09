@@ -1,0 +1,5 @@
+agravo_codigo,agravo_nome,municipio_codigo,municipio_nome,ano,semana_epidemiologica,contagem
+A001,Dengue,2800308,Aracaju,2025,1,120
+A001,Dengue,2800308,Aracaju,2025,2,135
+A001,Dengue,2800308,Aracaju,2025,3,98
+A002,Chikungunya,2800308,Aracaju,2025,1,12
