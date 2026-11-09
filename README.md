@@ -240,6 +240,31 @@ MongoDB quando exigido pelos testes.
 
 ---
 
+## 🚀 CI/CD com GitHub Actions
+
+O workflow [`.github/workflows/ci-cd.yml`](.github/workflows/ci-cd.yml) executa
+lint com Ruff, `manage.py check` e testes com `pytest` para cada push e pull
+request direcionado à branch `main`. O MongoDB 7 é iniciado como serviço de
+banco para os testes. O pipeline usa Python 3.14, conforme a stack do projeto.
+
+Ao criar e enviar uma tag no formato `v*` (por exemplo, `v1.0.0`), o pipeline
+aguarda a CI e publica automaticamente um GitHub Release com um arquivo `.tar.gz`
+do código-fonte e notas de versão geradas pelo GitHub. Assim, você pode
+versionar e disponibilizar releases sem precisar de um servidor próprio.
+
+Para publicar uma versão, use:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+O repositório precisa permitir que o `GITHUB_TOKEN` crie releases nas
+configurações de Actions. Isso faz a entrega/publicação do código; hospedar e
+executar a aplicação em produção pode ser configurado separadamente no futuro.
+
+---
+
 ## 👥 Autores e Equipe de Desenvolvimento
 
 O **VigiaSUS Local** foi desenvolvido como projeto acadêmico da
