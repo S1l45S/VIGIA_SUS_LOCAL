@@ -247,6 +247,38 @@ pytest -v
 dependências instaladas, configurações de ambiente definidas e acesso ao
 MongoDB quando exigido pelos testes.
 
+### Executar a aplicação com Docker
+
+Com Docker Engine e Docker Compose instalados, prepare as configurações locais
+e inicie os containers da aplicação e do MongoDB:
+
+```bash
+cp .env.example .env
+docker compose up --build
+```
+
+A aplicação ficará disponível em <http://localhost:8000/admin/>. O MongoDB
+usa um volume nomeado (`mongodb_data`), então os dados permanecem entre
+reinicializações. As migrações são executadas automaticamente quando o
+container web inicia. Para interromper os serviços, use `Ctrl+C`; para
+encerrá-los em segundo plano, use `docker compose down`.
+
+Os testes também podem ser executados no container:
+
+```bash
+docker compose --profile test run --rm tests
+```
+
+Para remover também os dados persistidos no volume:
+
+```bash
+docker compose down -v
+```
+
+O `runserver` incluído no Compose é voltado ao desenvolvimento local, não à
+publicação em produção. Os valores em `.env.example` são apenas para
+execução local; configure segredos próprios antes de expor a aplicação.
+
 ---
 
 ## 🚀 CI/CD com GitHub Actions
