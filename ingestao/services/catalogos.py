@@ -24,7 +24,7 @@ def _ler(caminho, colunas):
 
 
 def ler_municipios(caminho):
-    """Devolve a lista de municípios, com o código IBGE já conferido."""
+    """Devolve a lista de municípios, com o código IBGE já conferido """
     municipios = []
     vistos = set()
     for numero, linha in enumerate(_ler(caminho, COLUNAS_MUNICIPIOS), start=2):
