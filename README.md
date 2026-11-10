@@ -1,3 +1,4 @@
+<div align="center">
 # 🛡️ VigiaSUS Local
 
 <p align="center">
@@ -11,6 +12,7 @@
 municipal</strong><br> Identificação precoce de
 anomalias em agravos de notificação compulsória.
 </p>
+</div>
 
 ---
 
