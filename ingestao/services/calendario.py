@@ -10,23 +10,22 @@ import re
 from datetime import date, timedelta
 
 DIAS_POR_SEMANA = 7
-DOMINGO_DE_REFERENCIA = date(1970, 1, 4)
 
 
 def inicio_se1(ano):
-    """devolve o domingo em que começa a SE 1 do ano"""
+    """Devolve o domingo em que começa a SE 1 do ano."""
     quatro_de_janeiro = date(ano, 1, 4)
     dias_desde_domingo = (quatro_de_janeiro.weekday() + 1) % 7
     return quatro_de_janeiro - timedelta(days=dias_desde_domingo)
 
 
 def semanas_no_ano(ano):
-    """devolve quantas semanas epidemiológicas o ano tem, 52 ou 53"""
+    """Devolve quantas semanas epidemiológicas o ano tem, 52 ou 53."""
     return (inicio_se1(ano + 1) - inicio_se1(ano)).days // DIAS_POR_SEMANA
 
 
 def inicio_semana_epidemiologica(ano, semana):
-    """devolve o domingo em que começa a semana epidemiológica informada"""
+    """Devolve o domingo em que começa a semana epidemiológica informada."""
     if not 1 <= semana <= semanas_no_ano(ano):
         raise ValueError(
             f"Semana epidemiológica inexistente no ano {ano}: {semana}."
@@ -34,13 +33,21 @@ def inicio_semana_epidemiologica(ano, semana):
     return inicio_se1(ano) + timedelta(weeks=semana - 1)
 
 
-def ordinal_semana(inicio):
-    """Numero sequencial da semana, contado a partir de 04/01/1970"""
-    return (inicio - DOMINGO_DE_REFERENCIA).days // DIAS_POR_SEMANA
+def semana_iso_equivalente(ano, semana):
+    """Traduz uma SE para o (ano, semana) ISO da segunda-feira seguinte.
+
+    A validação do CSV de ingestão interpreta ano e semana como semana ISO, que
+    começa na segunda-feira. Cada SE começa num domingo, então a segunda-feira
+    seguinte identifica a mesma semana sem ambiguidade. As semanas continuam
+    consecutivas, inclusive na virada de ano.
+    """
+    segunda = inicio_semana_epidemiologica(ano, semana) + timedelta(days=1)
+    iso = segunda.isocalendar()
+    return iso.year, iso.week
 
 
 def semana_da_data(data):
-    """devolve  o par (ano, semana) da SE que contem a data"""
+    """Devolve (ano, semana) da SE que contém a data."""
     for ano in (data.year + 1, data.year, data.year - 1):
         primeiro_domingo = inicio_se1(ano)
         if primeiro_domingo <= data:
@@ -50,13 +57,13 @@ def semana_da_data(data):
 
 
 def deslocar_semana(ano, semana, quantidade):
-    """anda a quantidade semanas, para frente ou para tras"""
+    """Anda `quantidade` semanas, para frente ou para trás."""
     inicio = inicio_semana_epidemiologica(ano, semana)
     return semana_da_data(inicio + timedelta(weeks=quantidade))
 
 
 def listar_semanas(inicio, fim):
-    """lista as tuplas (ano, semana) de inicio até fim, ambos inclusos"""
+    """Lista as tuplas (ano, semana) de `inicio` a `fim`, ambos inclusive."""
     data_inicial = inicio_semana_epidemiologica(*inicio)
     data_final = inicio_semana_epidemiologica(*fim)
     if data_inicial > data_final:
@@ -69,7 +76,7 @@ def listar_semanas(inicio, fim):
 
 
 def ano_semana_de_texto(texto):
-    """Converte AAAASS, tipo '202501', em (ano, semana)"""
+    """Converte 'AAAASS', por exemplo '202501', em (ano, semana)."""
     texto = str(texto).strip()
     if not re.fullmatch(r"\d{6}", texto):
         raise ValueError("Informe a semana no formato AAAASS, como 202501.")

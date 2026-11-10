@@ -7,8 +7,8 @@ from ingestao.services.calendario import (
     deslocar_semana,
     inicio_semana_epidemiologica,
     listar_semanas,
-    ordinal_semana,
     semana_da_data,
+    semana_iso_equivalente,
     semanas_no_ano,
 )
 
@@ -60,10 +60,30 @@ def test_semana_da_data_e_inversa_de_inicio_semana():
             assert semana_da_data(inicio + timedelta(days=6)) == (ano, semana)
 
 
-def test_ordinal_semana_cresce_de_um_em_um():
-    primeiro = inicio_semana_epidemiologica(2025, 1)
-    assert ordinal_semana(primeiro + timedelta(weeks=1)) == ordinal_semana(primeiro) + 1
-    assert ordinal_semana(date(1970, 1, 4)) == 0
+@pytest.mark.parametrize(("se", "iso"), [
+    ((2024, 1), (2024, 1)),
+    ((2025, 1), (2025, 1)),
+    ((2020, 53), (2020, 53)),
+    ((2025, 52), (2025, 52)),
+    ((2025, 53), (2026, 1)),   # SE 53 de 2025 cai na ISO 1 de 2026
+    ((2026, 1), (2026, 2)),    # 2026 tem 53 semanas ISO e 52 SE
+])
+def test_semana_iso_equivalente(se, iso):
+    assert semana_iso_equivalente(*se) == iso
+
+
+def test_semanas_iso_equivalentes_sao_consecutivas_na_segunda_feira():
+    semanas = listar_semanas((2019, 1), (2027, 10))
+    segundas = [
+        date.fromisocalendar(*semana_iso_equivalente(ano, semana), 1)
+        for ano, semana in semanas
+    ]
+
+    assert all(
+        proxima - anterior == timedelta(days=7)
+        for anterior, proxima in zip(segundas, segundas[1:])
+    )
+    assert segundas[0] == inicio_semana_epidemiologica(2019, 1) + timedelta(days=1)
 
 
 def test_listar_semanas_atravessa_ano_de_53_semanas():
