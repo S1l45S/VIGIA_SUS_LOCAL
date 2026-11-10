@@ -365,7 +365,7 @@ perfil ↗</a>
 
 ## 📄 Licença
 Este projeto é distribuído sob os termos da GNU Affero General Public
-License v3.0 (AGPL-3.0). Consulte o arquivo [`LICENSE.txt`](LICENSE.txt)
+License v3.0 (AGPL-3.0). Consulte o arquivo [`LICENSE`](LICENSE)
 na raiz do repositório para acessar o texto integral da licença.
 
 Em linhas gerais, a AGPL-3.0 é uma licença de software livre com copyleft.
