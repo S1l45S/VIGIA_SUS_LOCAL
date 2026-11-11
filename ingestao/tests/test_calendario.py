@@ -86,9 +86,15 @@ def test_semanas_iso_equivalentes_sao_consecutivas_na_segunda_feira():
     assert segundas[0] == inicio_semana_epidemiologica(2019, 1) + timedelta(days=1)
 
 
-def test_listar_semanas_atravessa_ano_de_53_semanas():
-    assert listar_semanas((2025, 52), (2026, 2)) == [
-        (2025, 52), (2025, 53), (2026, 1), (2026, 2),
+def test_csv_usa_a_semana_iso_equivalente_na_virada_de_ano_de_53_semanas():
+    tabela = agregar(
+        canonica((ARACAJU, 2025, 53), (ARACAJU, 2026, 1)),
+        inicio=(2025, 52), fim=(2026, 2),
+    ).tabela
+
+    # SE 52 de 2025, SE 53 de 2025, SE 1 de 2026 e SE 2 de 2026 em semana ISO.
+    assert list(zip(tabela["ano"], tabela["semana_epidemiologica"], tabela["contagem"])) == [
+        (2025, 52, 0), (2026, 1, 1), (2026, 2, 1), (2026, 3, 0),
     ]
 
 
