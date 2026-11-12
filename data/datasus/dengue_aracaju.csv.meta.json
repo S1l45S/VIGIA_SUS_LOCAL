@@ -1,0 +1,74 @@
+{
+  "agravo": {
+    "codigo": "A90",
+    "nome": "Dengue"
+  },
+  "arquivos_brutos": [
+    {
+      "ano": 2019,
+      "arquivo": "DENGBR19.parquet",
+      "sha256": "57353887a3ad67540944c6cfd9557083abdabd52a50bb35db70dcabedcefbc8d"
+    },
+    {
+      "ano": 2020,
+      "arquivo": "DENGBR20.parquet",
+      "sha256": "ac57267d5d5f7774f95b4979b0dd499b744ee289ded3ef0fccc41ac3006034fa"
+    },
+    {
+      "ano": 2021,
+      "arquivo": "DENGBR21.parquet",
+      "sha256": "9f9560c4d20d13e77255849fe1859a5dc8b7d767cf8d9004f96dc0b68b56c0e9"
+    },
+    {
+      "ano": 2022,
+      "arquivo": "DENGBR22.parquet",
+      "sha256": "aaa8d1279453889a8cf17ef78f0308b3ef46a1fa3626b7881c13de4ce1e00eb6"
+    },
+    {
+      "ano": 2023,
+      "arquivo": "DENGBR23.parquet",
+      "sha256": "16a1e44a1c62777fb8dbad0a232798455f514209568d295855e1b6e7aebd3068"
+    },
+    {
+      "ano": 2024,
+      "arquivo": "DENGBR24.parquet",
+      "sha256": "9c4dc794eff4f965aaead7ef712d82fa0e19893c645a8d3ed397d482b0429af7"
+    },
+    {
+      "ano": 2025,
+      "arquivo": "DENGBR25.parquet",
+      "sha256": "448532d3315f2f24b8573cab1d030b0491ff7180dd274ccc0b66b679a8b5f28c"
+    },
+    {
+      "ano": 2026,
+      "arquivo": "DENGBR26.parquet",
+      "sha256": "778041f4695db81ae8ad9e59be40aa83b971f932603c98525356991d1375cc7b"
+    }
+  ],
+  "calendario_do_csv": "ano e semana_epidemiologica do CSV seguem a semana ISO da segunda-feira seguinte ao domingo de início da SE",
+  "csv_sha256": "5bf43e592e7a15869172311c1103e0163e7b63d1a6b4c4d86e1b223c85248728",
+  "descartes": {
+    "agregacao": {
+      "municipio_fora_do_recorte": 14769313,
+      "semana_fora_do_periodo": 102
+    },
+    "fonte": {
+      "agravo_diferente": 11218,
+      "campo_nulo": 0,
+      "municipio_invalido": 0,
+      "semana_formato_invalido": 0,
+      "semana_inexistente": 337
+    }
+  },
+  "extraido_em": "2026-11-12T01:17:42.237876+00:00",
+  "fonte": "SINAN/DATASUS",
+  "linhas_lidas": 14791784,
+  "municipios": 1,
+  "notificacoes_contadas": 10814,
+  "periodo": {
+    "fim": "202636",
+    "inicio": "201901"
+  },
+  "semanas_cortadas": 4,
+  "tipo_semana": "SEM_NOT (semana de notificação)"
+}
