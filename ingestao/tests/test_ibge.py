@@ -6,7 +6,6 @@ from ingestao.services.ibge import com_dv, digito_verificador
 @pytest.mark.parametrize(("codigo6", "dv"), [
     ("280030", 8),   # Aracaju
 ])
-
 def test_digito_verificador_de_municipios_conhecidos(codigo6, dv):
     assert digito_verificador(codigo6) == dv
 

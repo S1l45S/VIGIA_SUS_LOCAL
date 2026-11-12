@@ -2,7 +2,7 @@ def digito_verificador(codigo6):
     """Calcula o dígito verificador de um código IBGE de 6 dígitos.
 
     Pesos 1, 2, 1, 2, 1, 2. Os algarismos de cada produto são somados e o
-    dígito eh o complemento da soma para a próxima dezena.
+    dígito é o complemento da soma para a próxima dezena.
     """
     texto = str(codigo6).strip()
     if not texto.isdigit() or len(texto) != 6:
@@ -15,9 +15,9 @@ def digito_verificador(codigo6):
 
 
 def com_dv(codigo):
-    """Devolve o código de 7 dígitos
+    """Devolve o código de 7 dígitos.
 
-    Aceita 6 dígitos, que ganham o dígito verificador, ou 7 digitos, que têm
+    Aceita 6 dígitos, que ganham o dígito verificador, ou 7 dígitos, que têm
     o dígito conferido
     """
     texto = str(codigo).strip()
