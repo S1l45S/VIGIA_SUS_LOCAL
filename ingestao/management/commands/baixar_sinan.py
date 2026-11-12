@@ -17,7 +17,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
 
         parser.add_argument("--doenca", required=True,
-                            help="Nome da doença no PySUS, por exemplo dengue.")
+                            help="Código da doença no PySUS, por exemplo DENG.")
         parser.add_argument("--agravo-codigo", required=True,
                             help="Código do agravo no SINAN, por exemplo A90.")
         parser.add_argument("--ano-inicial", required=True, type=int)
