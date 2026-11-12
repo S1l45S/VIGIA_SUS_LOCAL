@@ -16,6 +16,8 @@ from ingestao.services.saida import sha256_arquivo
 def _como_lista(resultado):
     if isinstance(resultado, (str, Path)):
         return [resultado]
+    if hasattr(resultado, "paths"):
+        return list(resultado.paths)
     return list(resultado)
 
 
@@ -34,9 +36,11 @@ def _ler_parquet(caminho):
 
 def baixar_sinan_pysus(doenca, ano):
     """baixa um ano e devolve (DataFrame, lista de arquivos brutos)"""
-    from pysus import sinan
+    from pysus import ftp
 
-    resultado = sinan(disease=doenca, year=ano)  # se a API diferir por algum motivo nesse curto tempo, ajustem aqui
+    # pysus.sinan (obsoleta) baixou dois arquivos com o mesmo nome e a leitura
+    # falhou. A origem FTP devolve um arquivo por ano.
+    resultado = ftp.sinan(disease=doenca, year=ano)
     if isinstance(resultado, pd.DataFrame):
         return selecionar_colunas(resultado), []
 
