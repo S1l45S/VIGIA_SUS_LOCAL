@@ -1,6 +1,6 @@
 """Orquestra a preparação do CSV a partir de qualquer fonte"""
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from ingestao.fontes.base import verificar_notificacoes
 from ingestao.services.agregacao import (
@@ -54,7 +54,7 @@ def preparar_csv(
     )
     escrever_csv(resultado.tabela, saida)
 
-    agora = agora or datetime.now(timezone.utc)
+    agora = agora or datetime.now(UTC)
     metadados = {
         "fonte": notificacoes.fonte,
         "tipo_semana": notificacoes.tipo_semana,

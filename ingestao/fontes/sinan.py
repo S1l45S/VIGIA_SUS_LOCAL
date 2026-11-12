@@ -5,7 +5,7 @@ injetado, então ele não importa PySUS nem acessa rede
 """
 
 from collections import Counter
-from typing import Callable, Sequence
+from collections.abc import Callable, Sequence
 
 import pandas as pd
 

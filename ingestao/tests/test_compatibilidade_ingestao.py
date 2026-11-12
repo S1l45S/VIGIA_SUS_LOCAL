@@ -5,6 +5,7 @@ Prova que a saída da nova ingestão é aceita por elas
 
 import csv
 from datetime import timedelta
+from itertools import pairwise
 
 from deteccao.services.estatistica import processar_series
 from ingestao.services.preparacao import preparar_csv
@@ -52,7 +53,7 @@ def test_semanas_ficam_consecutivas_em_toda_a_serie(tmp_path):
 
     datas = [registro["semana_inicio"] for registro in validar(caminho)]
 
-    assert all(b - a == timedelta(days=7) for a, b in zip(datas, datas[1:]))
+    assert all(b - a == timedelta(days=7) for a, b in pairwise(datas))
 
 
 def test_a_contagem_da_se_53_nao_se_perde(tmp_path):

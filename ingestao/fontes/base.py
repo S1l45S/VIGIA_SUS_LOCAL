@@ -3,8 +3,9 @@
 O resto da ingestão conhece só este módulo. Cada fonte traduz o seu formato para a tabela abaixo.
 """
 
+from collections.abc import Sequence
 from dataclasses import dataclass, field
-from typing import Protocol, Sequence
+from typing import Protocol
 
 import pandas as pd
 from pandas.api.types import is_integer_dtype, is_string_dtype

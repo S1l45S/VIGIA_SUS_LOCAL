@@ -1,5 +1,5 @@
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pandas as pd
 import pytest
@@ -11,7 +11,7 @@ from ingestao.tests.fontes_falsas import FonteEmMemoria
 
 ARACAJU = "2800308"
 MUNICIPIOS = {ARACAJU: "Aracaju"}
-AGORA = datetime(2026, 11, 10, 12, 0, tzinfo=timezone.utc)
+AGORA = datetime(2026, 11, 10, 12, 0, tzinfo=UTC)
 
 
 def preparar(tmp_path, fonte, nome="saida.csv", **extra):
@@ -35,7 +35,7 @@ def test_grava_csv_no_contrato_e_metadados_da_fonte(tmp_path):
         descartes={"campo_nulo": 3},
     )
 
-    resultado, metadados, fim = preparar(tmp_path, fonte, fim=(2025, 4))
+    _resultado, metadados, fim = preparar(tmp_path, fonte, fim=(2025, 4))
 
     linhas = (tmp_path / "saida.csv").read_text(encoding="utf-8").splitlines()
     assert linhas[0] == (

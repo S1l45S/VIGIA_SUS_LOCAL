@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+from itertools import pairwise
 
 import pytest
 
@@ -81,7 +82,7 @@ def test_semanas_iso_equivalentes_sao_consecutivas_na_segunda_feira():
 
     assert all(
         proxima - anterior == timedelta(days=7)
-        for anterior, proxima in zip(segundas, segundas[1:])
+        for anterior, proxima in pairwise(segundas)
     )
     assert segundas[0] == inicio_semana_epidemiologica(2019, 1) + timedelta(days=1)
 
