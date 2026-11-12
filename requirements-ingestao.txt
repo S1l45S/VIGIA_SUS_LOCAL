@@ -1,0 +1,2 @@
+pyarrow
+pysus==2.11.7

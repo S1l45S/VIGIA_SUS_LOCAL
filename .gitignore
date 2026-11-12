@@ -33,3 +33,7 @@ htmlcov/
 # Sistema operacional
 .DS_Store
 Thumbs.db
+
+# dados de ingestão
+data/brutos/
+data/processados/

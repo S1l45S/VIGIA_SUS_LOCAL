@@ -2,7 +2,7 @@
 
 **Status:** proposta inicial; confirmar com amostras oficiais antes de estabilizar  
 **Responsável técnico:** equipe do projeto  
-**Última revisão:** 08/11/2026
+**Última revisão:** 12/11/2026
 
 ## 1. Objetivo e escopo
 
@@ -26,7 +26,7 @@ Se os arquivos de origem utilizarem ponto e vírgula, Latin-1 ou outra convenç�
 ## 3. Cabeçalho proposto
 
 ```csv
-agravo_codigo,agravo_nome,municipio_codigo,municipio_nome,ano,semana_epidemiologica,quantidade
+agravo_codigo,agravo_nome,municipio_codigo,municipio_nome,ano,semana_epidemiologica,contagem
 ```
 
 | Coluna | Tipo | Obrigatória | Regra |
@@ -37,12 +37,17 @@ agravo_codigo,agravo_nome,municipio_codigo,municipio_nome,ano,semana_epidemiolog
 | `municipio_nome` | texto | Sim | Nome compatível com o código do município |
 | `ano` | inteiro | Sim | Ano válido dentro do período aceito |
 | `semana_epidemiologica` | inteiro | Sim | Semana válida segundo o calendário definido para a fonte |
-| `quantidade` | inteiro | Sim | Contagem maior ou igual a zero |
+| `contagem` | inteiro | Sim | Contagem maior ou igual a zero |
+
+**Semana no CSV gerado pela ingestão do SINAN.** O gerador traduz cada semana
+epidemiológica (domingo a sábado) para a semana ISO da segunda-feira seguinte, porque a
+validação da carga lê `ano` e `semana_epidemiologica` como semana ISO. Essa regra
+fica registrada no campo `calendario_do_csv` do arquivo `.meta.json`.
 
 ### Exemplo ilustrativo
 
 ```csv
-agravo_codigo,agravo_nome,municipio_codigo,municipio_nome,ano,semana_epidemiologica,quantidade
+agravo_codigo,agravo_nome,municipio_codigo,municipio_nome,ano,semana_epidemiologica,contagem
 AGR001,Agravo demonstrativo,2800308,Aracaju,2025,1,12
 AGR001,Agravo demonstrativo,2800308,Aracaju,2025,2,15
 ```
@@ -66,8 +71,8 @@ Os códigos e valores acima são apenas ilustrativos. Não representam dados ofi
 - Remover espaços periféricos de campos textuais antes da validação.
 - Validar códigos contra catálogos ou tabelas de correspondência.
 - Validar coerência entre código e nome do município/agravo.
-- `ano`, `semana_epidemiologica` e `quantidade` devem ser inteiros.
-- `quantidade` não pode ser negativa.
+- `ano`, `semana_epidemiologica` e `contagem` devem ser inteiros.
+- `contagem` não pode ser negativa.
 - Semana epidemiológica deve ser válida para o ano e para o calendário da fonte.
 - Não aceitar identificadores pessoais ou colunas com dados pessoais.
 - A linha rejeitada deve ser identificada pelo número da linha e por código/mensagem de erro.
@@ -180,7 +185,7 @@ A solicitação de série histórica de pelo menos cinco anos para Aracaju deve 
 |---|---|
 | Layout oficial de cada arquivo DATASUS | Ainda requer inspeção de amostras reais |
 | Separador e codificação dos arquivos de origem | Podem variar; adaptador deve normalizar |
-| Calendário epidemiológico | Deve ser confirmado para a fonte; não substituir automaticamente por semana ISO |
+| Calendário epidemiológico | O gerador do SINAN faz a tradução explícita para a semana ISO equivalente e a registra no `.meta.json`; confirmar com a equipe se esse é o critério definitivo |
 | Dimensões adicionais (sexo, faixa etária, classificação etc.) | Verificar nos arquivos antes de fechar a chave de negócio |
 | Política de carga parcial | Aprovar entre rejeição integral e importação parcial controlada |
 | Política de reprocessamento | Aprovar e cobrir com testes |
@@ -197,3 +202,23 @@ O contrato só deve ser marcado como estável quando:
 4. a política de duplicidade e reprocessamento estiver aprovada;
 5. os testes obrigatórios estiverem automatizados;
 6. a documentação e os exemplos forem atualizados com dados sintéticos ou anonimizados.
+
+## 12. Ingestão do SINAN (dengue, Aracaju)
+
+O arquivo `data/datasus/dengue_aracaju.csv` é gerado pelo comando `baixar_sinan`, que
+baixa os arquivos do SINAN pelo PySUS, conta as notificações por município e semana,
+completa as semanas sem caso com zero e grava o CSV neste contrato. O comando não grava
+no banco. A carga é feita depois, por `importar_dados`.
+
+Ao lado de cada CSV é gravado um `.meta.json` com:
+
+- fonte, agravo e período (`AAAASS`);
+- nome e hash `sha256` de cada arquivo bruto e do próprio CSV;
+- linhas lidas, notificações contadas e descartes por motivo;
+- data da extração e o calendário usado nas semanas.
+
+Por padrão as quatro últimas semanas da fonte são cortadas (`--cortar-ultimas`), porque as
+semanas mais recentes costumam ter notificações ainda incompletas.
+
+A conta de conferência é: linhas lidas, menos os descartes da fonte, menos os descartes da
+agregação, igual às notificações contadas.
