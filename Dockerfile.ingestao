@@ -18,6 +18,8 @@ WORKDIR /app
 
 COPY requirements.txt requirements-ingestao.txt ./
 
+# O pysus 2.11.7 exige pandas 2.x, por isso a imagem de ingestão usa uma
+# versão diferente da do requirements.txt, que é usada pelos testes e pelo CI.
 RUN python -m pip install --no-cache-dir --upgrade pip \
     && grep -v '^pandas==' requirements.txt > /tmp/requirements-base.txt \
     && python -m pip install --no-cache-dir \
