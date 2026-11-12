@@ -91,8 +91,10 @@ def test_periodo_atravessa_a_virada_de_ano_de_53_semanas():
         inicio=(2025, 52), fim=(2026, 2),
     ).tabela
 
+    # O CSV usa semana ISO da segunda-feira seguinte ao domingo de início da SE.
+    # Portanto, a SE 53/2025 vira ISO 2026/1 e a SE 1/2026 vira ISO 2026/2.
     assert list(zip(tabela["ano"], tabela["semana_epidemiologica"], tabela["contagem"])) == [
-        (2025, 52, 0), (2025, 53, 1), (2026, 1, 1), (2026, 2, 0),
+        (2025, 52, 0), (2026, 1, 1), (2026, 2, 1), (2026, 3, 0),
     ]
 
 
