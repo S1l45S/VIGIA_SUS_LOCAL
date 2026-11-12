@@ -1,2 +1,2 @@
 pyarrow
-pysus
+pysus==2.11.7
