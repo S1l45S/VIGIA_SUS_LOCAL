@@ -1,0 +1,19 @@
+services:
+  ingestao:
+    build:
+      context: .
+      dockerfile: Dockerfile.ingestao
+    profiles: ["ingestao"]
+    environment:
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-local-development-only-change-me}
+      DJANGO_DEBUG: "False"
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
+      MONGODB_URI: mongodb://mongodb:27017/?directConnection=true
+      MONGODB_DATABASE: ${MONGODB_DATABASE:-vigiasus_local}
+      HOME: /tmp
+      PYSUS_CACHEPATH: /tmp/.pysus
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      mongodb:
+        condition: service_healthy

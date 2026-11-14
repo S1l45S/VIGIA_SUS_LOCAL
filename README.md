@@ -284,6 +284,38 @@ execução local; configure segredos próprios antes de expor a aplicação.
 
 ---
 
+## 📥 Ingestão de dados do DATASUS
+
+A série histórica de dengue de Aracaju vem do SINAN, baixada pelo PySUS, e é gravada
+no CSV normalizado descrito em [`docs/ingestao/contrato-csv.md`](docs/ingestao/contrato-csv.md).
+O resultado fica em `data/datasus/dengue_aracaju.csv`, com o `.meta.json` ao lado
+(fonte, período, hash dos arquivos brutos e contagem de linhas lidas, contadas e descartadas).
+
+O download roda em uma imagem própria, `Dockerfile.ingestao`, que usa pandas 2.3.3 porque o
+PySUS 2.11.7 exige pandas 2.x. O restante do projeto usa o pandas do `requirements.txt`.
+
+```bash
+export COMPOSE_FILE=compose.yaml:compose.ingestao.yaml
+docker compose --profile ingestao build ingestao
+docker compose run --rm ingestao python manage.py migrate --noinput
+docker compose run --rm ingestao python manage.py popular_catalogos
+docker compose run --rm ingestao python manage.py baixar_sinan \
+  --doenca DENG --agravo-codigo A90 \
+  --ano-inicial 2019 --ano-final 2026 \
+  --inicio 201901 --uf SE --municipio 2800308 \
+  --saida data/datasus/dengue_aracaju.csv
+docker compose run --rm ingestao python manage.py importar_dados \
+  --arquivo data/datasus/dengue_aracaju.csv
+```
+
+- `baixar_sinan` não grava no banco; `importar_dados` grava.
+- Sem `--fim`, as quatro últimas semanas da fonte são cortadas, por serem as mais subnotificadas.
+- Os arquivos brutos ficam em `data/brutos/`, que o git ignora.
+- Testes da ingestão na imagem própria:
+  `docker compose run --rm ingestao pytest --ds=config.settings -q ingestao/tests`
+
+---
+
 ## 🚀 CI/CD com GitHub Actions
 
 O workflow [`.github/workflows/ci-cd.yml`](.github/workflows/ci-cd.yml) executa
