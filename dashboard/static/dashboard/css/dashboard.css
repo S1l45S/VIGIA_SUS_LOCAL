@@ -1,0 +1,253 @@
+:root {
+    --fundo: #f6f7f9;
+    --superficie: #ffffff;
+    --texto: #1f2937;
+    --suave: #6b7280;
+    --borda: #d8dce2;
+    --primaria: #2f6db0;
+    --alerta-fundo: #fff7e6;
+    --alerta-borda: #e3bd70;
+    --erro-fundo: #fdecec;
+    --erro-borda: #e0a1a1;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --fundo: #14171c;
+        --superficie: #1d2128;
+        --texto: #e6e8eb;
+        --suave: #9aa3af;
+        --borda: #343a44;
+        --primaria: #6ea4e0;
+        --alerta-fundo: #2c2410;
+        --alerta-borda: #7a5f1c;
+        --erro-fundo: #2e1818;
+        --erro-borda: #7a3a3a;
+    }
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--fundo);
+    color: var(--texto);
+    line-height: 1.45;
+}
+
+.topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .75rem 1.25rem;
+    background: var(--superficie);
+    border-bottom: 1px solid var(--borda);
+}
+
+.topo-usuario {
+    color: var(--suave);
+    font-size: .9rem;
+}
+
+.conteudo {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.25rem;
+}
+
+h1 {
+    font-size: 1.4rem;
+    margin: 0 0 1rem;
+}
+
+h2 {
+    font-size: 1.1rem;
+    margin: 1.25rem 0 .5rem;
+}
+
+.filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    align-items: flex-end;
+    padding: 1rem;
+    background: var(--superficie);
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    min-width: 170px;
+}
+
+.campo label {
+    font-size: .85rem;
+    color: var(--suave);
+}
+
+select,
+input[type="date"] {
+    padding: .45rem .5rem;
+    font: inherit;
+    color: var(--texto);
+    background: var(--superficie);
+    border: 1px solid var(--borda);
+    border-radius: 6px;
+}
+
+button {
+    padding: .55rem 1rem;
+    font: inherit;
+    color: #fff;
+    cursor: pointer;
+    background: var(--primaria);
+    border: 0;
+    border-radius: 6px;
+}
+
+button:hover {
+    filter: brightness(1.08);
+}
+
+:focus-visible {
+    outline: 3px solid var(--primaria);
+    outline-offset: 2px;
+}
+
+.aviso,
+.erro {
+    margin: 1rem 0;
+    padding: .75rem 1rem;
+    border-radius: 6px;
+}
+
+.aviso {
+    background: var(--alerta-fundo);
+    border: 1px solid var(--alerta-borda);
+}
+
+.erro {
+    background: var(--erro-fundo);
+    border: 1px solid var(--erro-borda);
+}
+
+.erro ul {
+    margin: 0;
+    padding-left: 1.1rem;
+}
+
+.resumo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: .75rem;
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.resumo li {
+    display: flex;
+    flex-direction: column;
+    gap: .15rem;
+    padding: .75rem 1rem;
+    background: var(--superficie);
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+}
+
+.resumo span {
+    font-size: .85rem;
+    color: var(--suave);
+}
+
+.resumo strong {
+    font-size: 1.5rem;
+}
+
+.grafico {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: var(--superficie);
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+}
+
+.grafico canvas {
+    display: block;
+}
+.grafico-area{
+    position: relative;
+    height: 500px;
+    width:100%;
+}
+
+.grafico figcaption {
+    margin-top: .75rem;
+    font-size: .85rem;
+    color: var(--suave);
+}
+
+.tabela-dados summary {
+    cursor: pointer;
+    margin: .5rem 0;
+}
+
+.rolagem {
+    max-height: 360px;
+    overflow: auto;
+    border: 1px solid var(--borda);
+    border-radius: 6px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .9rem;
+}
+
+th,
+td {
+    padding: .4rem .6rem;
+    text-align: right;
+    border-bottom: 1px solid var(--borda);
+}
+
+th:first-child,
+td:first-child,
+th:last-child,
+td:last-child {
+    text-align: left;
+}
+
+thead th {
+    position: sticky;
+    top: 0;
+    background: var(--superficie);
+}
+
+tr.anomalia {
+    background: var(--erro-fundo);
+    font-weight: 600;
+}
+
+.rodape-dados {
+    margin-top: 1rem;
+    font-size: .85rem;
+    color: var(--suave);
+}
+
+@media (max-width: 600px) {
+    .campo {
+        min-width: 100%;
+    }
+
+    .grafico canvas {
+        height: 300px;
+    }
+}
