@@ -1,5 +1,6 @@
 from django_mongodb_backend import transaction
 
+from alertas.integracao import sincronizar_alertas
 from deteccao.services.estatistica import processar_series
 from dominio.models import Agravo, Municipio
 from ingestao.models import CargaDeDados, RegistroSemanal
@@ -144,6 +145,10 @@ def importar_csv(caminho):
                     municipio_codigo=municipio_codigo,
                 ).order_by("semana_inicio")
                 processar_series(registros=serie)
+
+            # PB04: emite alertas das anomalias detectadas, na mesma transação da carga
+            # (tudo ou nada: carga, detecção e alertas).
+            sincronizar_alertas(sorted(series_afetadas), carga_id=str(carga.pk))
 
             carga.status = "ACEITA"
             carga.save(update_fields=["status"])

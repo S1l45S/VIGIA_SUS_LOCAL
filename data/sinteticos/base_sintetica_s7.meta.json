@@ -1,0 +1,181 @@
+{
+  "gerador": "ingestao.sintetica.gerador",
+  "versao_gerador": "1.0",
+  "semente": 7,
+  "inicio_segunda": "2024-10-14",
+  "fim_segunda": "2027-01-25",
+  "semanas": 120,
+  "municipios": 20,
+  "agravos": 5,
+  "registros": 12000,
+  "surtos_injetados": 79,
+  "perfis_agravos": [
+    {
+      "codigo": "A90",
+      "nome": "Dengue",
+      "nivel_aracaju": 25.0,
+      "amplitude_sazonal": 0.6,
+      "pico_dia_ano": 105,
+      "tendencia_anual": 0.0,
+      "sd_ano": 0.35,
+      "sd_municipio_ano": 0.25,
+      "sd_semana": 0.15,
+      "rho": 0.6
+    },
+    {
+      "codigo": "A92.8",
+      "nome": "Zika",
+      "nivel_aracaju": 1.5,
+      "amplitude_sazonal": 0.5,
+      "pico_dia_ano": 110,
+      "tendencia_anual": 0.0,
+      "sd_ano": 0.3,
+      "sd_municipio_ano": 0.25,
+      "sd_semana": 0.15,
+      "rho": 0.5
+    },
+    {
+      "codigo": "A92.0",
+      "nome": "Chikungunya",
+      "nivel_aracaju": 8.0,
+      "amplitude_sazonal": 0.7,
+      "pico_dia_ano": 130,
+      "tendencia_anual": 0.0,
+      "sd_ano": 0.4,
+      "sd_municipio_ano": 0.25,
+      "sd_semana": 0.15,
+      "rho": 0.6
+    },
+    {
+      "codigo": "B55",
+      "nome": "Leishmaniose",
+      "nivel_aracaju": 0.8,
+      "amplitude_sazonal": 0.15,
+      "pico_dia_ano": 200,
+      "tendencia_anual": 0.0,
+      "sd_ano": 0.2,
+      "sd_municipio_ano": 0.2,
+      "sd_semana": 0.1,
+      "rho": 0.3
+    },
+    {
+      "codigo": "A50",
+      "nome": "Sífilis congênita",
+      "nivel_aracaju": 2.5,
+      "amplitude_sazonal": 0.05,
+      "pico_dia_ano": 200,
+      "tendencia_anual": 0.06,
+      "sd_ano": 0.1,
+      "sd_municipio_ano": 0.15,
+      "sd_semana": 0.1,
+      "rho": 0.3
+    }
+  ],
+  "municipios_pesos": [
+    [
+      "2800308",
+      "Aracaju",
+      1.0
+    ],
+    [
+      "2804805",
+      "Nossa Senhora do Socorro",
+      0.3
+    ],
+    [
+      "2803500",
+      "Lagarto",
+      0.17
+    ],
+    [
+      "2802908",
+      "Itabaiana",
+      0.17
+    ],
+    [
+      "2806701",
+      "São Cristóvão",
+      0.16
+    ],
+    [
+      "2802106",
+      "Estância",
+      0.11
+    ],
+    [
+      "2807402",
+      "Tobias Barreto",
+      0.08
+    ],
+    [
+      "2807105",
+      "Simão Dias",
+      0.07
+    ],
+    [
+      "2800605",
+      "Barra dos Coqueiros",
+      0.07
+    ],
+    [
+      "2803005",
+      "Itabaianinha",
+      0.07
+    ],
+    [
+      "2804508",
+      "Nossa Senhora da Glória",
+      0.06
+    ],
+    [
+      "2805703",
+      "Propriá",
+      0.05
+    ],
+    [
+      "2801306",
+      "Capela",
+      0.05
+    ],
+    [
+      "2803609",
+      "Laranjeiras",
+      0.05
+    ],
+    [
+      "2805406",
+      "Poço Redondo",
+      0.05
+    ],
+    [
+      "2801207",
+      "Canindé de São Francisco",
+      0.045
+    ],
+    [
+      "2800670",
+      "Boquim",
+      0.04
+    ],
+    [
+      "2807600",
+      "Umbaúba",
+      0.04
+    ],
+    [
+      "2801405",
+      "Carira",
+      0.035
+    ],
+    [
+      "2804409",
+      "Neópolis",
+      0.03
+    ]
+  ],
+  "aviso": "Dados fictícios para teste do detector; não representam a epidemiologia real.",
+  "sha256": {
+    "base_sintetica_s7.csv": "760516354cdbefea5f3c1e922c03b5c893902f5af83ab8feff5c0f22a4848abf",
+    "surtos_injetados_s7.csv": "53abd23aa15ba8f930b9497d559b1c9f4809abbff6eab911fcfa75cf61267799"
+  }
+}

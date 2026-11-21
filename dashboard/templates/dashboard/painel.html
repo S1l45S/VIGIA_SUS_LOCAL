@@ -57,6 +57,14 @@
     <li><span>Semanas no gráfico</span><strong>{{ serie.pontos|length }}</strong></li>
 </ul>
 
+{% if serie.semanas_em_anomalia %}
+<p>
+    <a href="{% url 'alertas:painel' %}?municipio={{ serie.municipio_codigo|urlencode }}&amp;agravo={{ serie.agravo_codigo|urlencode }}&amp;situacao=todos">
+        Ver os alertas desta série ›
+    </a>
+</p>
+{% endif %}
+
 {% if serie.sem_banda %}
 <p class="aviso" role="status">
     Histórico insuficiente: a média móvel e o limite exigem 8 semanas
