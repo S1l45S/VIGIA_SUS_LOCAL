@@ -1,0 +1,137 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+
+{% block titulo %}Tendências temporais · VigiaSUS Local{% endblock %}
+
+{% block conteudo %}
+<h1>Tendências temporais</h1>
+
+{% if sem_catalogo %}
+<p class="aviso" role="status">
+    Nenhum município ou agravo cadastrado. Execute o cadastro dos catálogos e
+    a carga de dados antes de usar o dashboard.
+</p>
+{% else %}
+
+<form method="get" class="filtros" aria-label="Filtros da série temporal">
+    <div class="campo">
+        <label for="{{ form.municipio.id_for_label }}">Município</label>
+        {{ form.municipio }}
+    </div>
+    <div class="campo">
+        <label for="{{ form.agravo.id_for_label }}">Agravo</label>
+        {{ form.agravo }}
+    </div>
+    <div class="campo">
+        <label for="id_inicio">De</label>
+        <input type="date" id="id_inicio" name="inicio" value="{{ periodo_inicio|date:'Y-m-d' }}">
+    </div>
+    <div class="campo">
+        <label for="id_fim">Até</label>
+        <input type="date" id="id_fim" name="fim" value="{{ periodo_fim|date:'Y-m-d' }}">
+    </div>
+    <button type="submit">Aplicar filtros</button>
+</form>
+
+{% if form.errors %}
+<div class="erro" role="alert">
+    <ul>
+        {% for campo, erros in form.errors.items %}
+        {% for erro in erros %}<li>{{ erro }}</li>{% endfor %}
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+{% if serie %}
+<h2>{{ nome_agravo }} · {{ nome_municipio }}</h2>
+
+{% if serie.vazia %}
+<p class="aviso" role="status">
+    {{ nome_agravo }} em {{ nome_municipio }}: sem notificações no período.
+</p>
+{% else %}
+<ul class="resumo">
+    <li><span>Notificações no período</span><strong>{{ serie.total_notificacoes }}</strong></li>
+    <li><span>Semanas acima do limite</span><strong>{{ serie.semanas_em_anomalia }}</strong></li>
+    <li><span>Semanas no gráfico</span><strong>{{ serie.pontos|length }}</strong></li>
+</ul>
+
+{% if serie.sem_banda %}
+<p class="aviso" role="status">
+    Histórico insuficiente: a média móvel e o limite exigem 8 semanas
+    anteriores consecutivas. A série é exibida sem banda de referência.
+</p>
+{% elif serie.semanas_sem_referencia %}
+<p class="aviso" role="status">
+    {{ serie.semanas_sem_referencia }} semana{{ serie.semanas_sem_referencia|pluralize }}
+    do período sem média e limite (histórico insuficiente).
+</p>
+{% endif %}
+
+<figure class="grafico">
+    <div class="grafico-area">
+    <canvas id="grafico-serie" role="img"
+        aria-label="Notificações semanais de {{ nome_agravo }} em {{ nome_municipio }}, com média móvel de 8 semanas e limite superior"></canvas>
+    </div>
+    <p id="grafico-falha" class="aviso" hidden>
+        Não foi possível carregar o gráfico. Consulte a tabela abaixo.
+    </p>
+    <figcaption>
+        Barras = notificações (vermelhas: acima do limite) · linha contínua =
+        média móvel de 8 semanas · linha tracejada = limite μ + 2σ. Um valor
+        acima do limite é um sinal estatístico para verificação, não
+        confirmação de surto.
+    </figcaption>
+</figure>
+
+<details class="tabela-dados">
+    <summary>Ver dados em tabela</summary>
+    <div class="rolagem">
+        <table>
+            <thead>
+                <tr>
+                    <th>Semana</th>
+                    <th>Observado</th>
+                    <th>Média móvel</th>
+                    <th>Limite</th>
+                    <th>Situação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ponto in serie.pontos %}
+                <tr{% if ponto.anomalia %} class="anomalia" {% endif %}>
+                    <td>{{ ponto.rotulo }}</td>
+                    <td>{{ ponto.observado }}</td>
+                    <td>{{ ponto.media_formatada }}</td>
+                    <td>{{ ponto.limite_formatado }}</td>
+                    <td>{% if ponto.anomalia %}Acima do limite{% elif ponto.limite_superior is None %}Histórico
+                        insuficiente{% else %}Normal{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</details>
+{% endif %}
+
+<p class="rodape-dados">
+    {% if ultima_carga %}
+    Última carga aceita: {{ ultima_carga.criada_em|date:"d/m/Y H:i" }} (UTC) ·
+    {% else %}
+    Nenhuma carga aceita registrada ·
+    {% endif %}
+    consulta: {{ tempo_consulta_ms }} ms
+</p>
+{% endif %}
+
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{% if dados_grafico %}
+{{ dados_grafico|json_script:"dados-grafico" }}
+<script src="{% static 'dashboard/vendor/chart.umd.js' %}"></script>
+<script src="{% static 'dashboard/js/grafico.js' %}"></script>
+{% endif %}
+{% endblock %}
