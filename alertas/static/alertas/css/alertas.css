@@ -1,0 +1,19 @@
+/* Complementa dashboard.css (usa as mesmas variáveis de tema). */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .75rem; margin: 0 0 1rem; padding: 0; list-style: none; }
+.kpis li { background: var(--superficie); border: 1px solid var(--borda); border-left-width: 6px; border-radius: 8px; padding: .6rem .9rem; display: flex; flex-direction: column; }
+.kpis strong { font-size: 1.4rem; }
+.kpis span { color: var(--suave); font-size: .85rem; }
+.alerta-card { background: var(--superficie); border: 1px solid var(--borda); border-left-width: 6px; border-radius: 8px; padding: .75rem 1rem; margin: .75rem 0; }
+.alerta-card .linha { display: flex; justify-content: space-between; gap: .5rem; flex-wrap: wrap; }
+.alerta-card.substituido { opacity: .75; border-style: dashed; }
+.alerta-card .valores { color: var(--suave); font-size: .9rem; margin-top: .25rem; }
+.novo { border-left-color: #b42318; } .em_investigacao { border-left-color: #b54708; } .encerrado { border-left-color: #667085; }
+.selo { display: inline-block; padding: 0 .6rem; border-radius: 999px; font-size: .8rem; color: #fff; }
+.selo.novo { background: #b42318; } .selo.em_investigacao { background: #b54708; } .selo.encerrado { background: #667085; } .selo.substituido { background: #6941c6; }
+.sucesso { margin: 1rem 0; padding: .75rem 1rem; border-radius: 6px; background: #d1fadf; border: 1px solid #75e0a7; color: #054f31; }
+.ficha, .historico { width: 100%; border-collapse: collapse; }
+.ficha th, .ficha td, .historico th, .historico td { text-align: left; padding: .4rem .5rem; border-bottom: 1px solid var(--borda); }
+.form-situacao { display: grid; gap: .75rem; max-width: 480px; }
+.form-situacao textarea { font: inherit; padding: .45rem .5rem; color: var(--texto); background: var(--superficie); border: 1px solid var(--borda); border-radius: 6px; }
+.nav { display: flex; gap: 1rem; }
+.nav a { color: var(--primaria); }

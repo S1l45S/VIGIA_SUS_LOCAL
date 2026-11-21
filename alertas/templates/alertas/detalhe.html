@@ -1,0 +1,55 @@
+{% extends "dashboard/base.html" %}
+{% load static alertas_extras %}
+{% block titulo %}Alerta {{ alerta.rotulo_semana }} · VigiaSUS Local{% endblock %}
+{% block estilos %}<link rel="stylesheet" href="{% static 'alertas/css/alertas.css' %}">{% endblock %}
+
+{% block conteudo %}
+<p><a href="{% url 'alertas:painel' %}">‹ Painel de alertas</a></p>
+<h1>{{ alerta.rotulo_semana }} · {{ alerta.agravo_nome }} · {{ alerta.municipio_nome }}</h1>
+<p>
+    <span class="selo {{ alerta.situacao }}">{{ alerta.rotulo_situacao }}</span>
+    {% if alerta.substituido %}<span class="selo substituido">Substituído por reprocessamento · somente leitura</span>{% endif %}
+</p>
+
+{% include "alertas/_mensagens.html" %}
+
+<table class="ficha">
+    <tr><th>Semana epidemiológica</th><td>{{ alerta.rotulo_semana }} (semana iniciada em {{ alerta.semana_inicio|date:"d/m/Y" }})</td></tr>
+    <tr><th>Agravo</th><td>{{ alerta.agravo_nome }}</td></tr>
+    <tr><th>Território</th><td>{{ alerta.municipio_nome }} ({{ alerta.municipio_codigo }})</td></tr>
+    <tr><th>Valor observado</th><td>{{ alerta.observado }}</td></tr>
+    <tr><th>Média móvel ({{ alerta.janela_semanas }} semanas)</th><td>{{ alerta.media|decimal_br }} (σ = {{ alerta.desvio|decimal_br }})</td></tr>
+    <tr><th>Limite excedido (μ + {{ alerta.fator_desvio }}σ)</th><td>{{ alerta.limite|decimal_br }}</td></tr>
+</table>
+
+{% if pode_alterar %}
+<h2>Atualizar situação</h2>
+<form method="post" action="{% url 'alertas:alterar_situacao' alerta.pk %}" class="form-situacao">
+    {% csrf_token %}
+    {{ form.versao }}
+    <div class="campo"><label for="{{ form.nova_situacao.id_for_label }}">{{ form.nova_situacao.label }}</label>{{ form.nova_situacao }}</div>
+    <div class="campo"><label for="{{ form.observacao.id_for_label }}">{{ form.observacao.label }}</label>{{ form.observacao }}</div>
+    <div><button type="submit">Registrar situação</button></div>
+</form>
+{% elif not alerta.substituido %}
+<p class="aviso">Alerta encerrado: permanece no histórico e não é reaberto no MVP.</p>
+{% endif %}
+
+<h2>Histórico de situação</h2>
+<p class="aviso">Registro somente de acréscimo: não pode ser editado nem excluído pela interface. Horários em UTC.</p>
+<div class="rolagem">
+<table class="historico">
+    <thead><tr><th>Data/hora (UTC)</th><th>Situação</th><th>Usuário</th><th>Observação</th></tr></thead>
+    <tbody>
+    {% for r in historico %}
+        <tr>
+            <td>{{ r.em|date:"d/m/Y H:i:s" }}</td>
+            <td>{% if r.situacao_anterior %}{{ r.rotulo_anterior }} → {% endif %}{{ r.rotulo }}</td>
+            <td>{{ r.usuario_nome }}{% if r.origem == "sistema" %} (automático){% endif %}</td>
+            <td>{{ r.observacao }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

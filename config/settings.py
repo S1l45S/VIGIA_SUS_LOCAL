@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "ingestao",
     "deteccao",
     "dashboard",
+    "alertas",
 ]
 
 MIDDLEWARE = [
@@ -116,6 +117,10 @@ STATIC_URL = "static/"
 # (usuário com is_staff).
 LOGIN_URL = os.getenv("DJANGO_LOGIN_URL", "/admin/login/")
 LOGIN_REDIRECT_URL = "dashboard:painel"
+
+# Alertas (PB04): emitir alerta só para anomalias das N semanas mais recentes de cada
+# série. 0/vazio = todas as anomalias (RF004 literal).
+ALERTAS_SEMANAS_RECENTES = int(os.getenv("ALERTAS_SEMANAS_RECENTES", "0")) or None
 
 DEFAULT_AUTO_FIELD = "django_mongodb_backend.fields.ObjectIdAutoField"
 

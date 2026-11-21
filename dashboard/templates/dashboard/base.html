@@ -7,11 +7,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block titulo %}VigiaSUS Local{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
+    {% block estilos %}{% endblock %}
 </head>
 
 <body>
     <header class="topo">
         <strong>VigiaSUS Local</strong>
+        {% if user.is_authenticated %}
+        <nav class="nav" aria-label="Principal">
+            <a href="{% url 'dashboard:painel' %}">Tendências</a>
+            <a href="{% url 'alertas:painel' %}">Alertas</a>
+        </nav>
+        {% endif %}
         {% if user.is_authenticated %}
         <span class="topo-usuario">{{ user.get_username }}</span>
         {% endif %}

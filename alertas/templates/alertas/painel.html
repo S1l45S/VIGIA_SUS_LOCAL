@@ -1,0 +1,52 @@
+{% extends "dashboard/base.html" %}
+{% load static alertas_extras %}
+{% block titulo %}Alertas · VigiaSUS Local{% endblock %}
+{% block estilos %}<link rel="stylesheet" href="{% static 'alertas/css/alertas.css' %}">{% endblock %}
+
+{% block conteudo %}
+<h1>Alertas de anomalia</h1>
+<p class="aviso">Sinal estatístico (média móvel de 8 semanas + 2σ) para verificação em campo. Não é diagnóstico nem confirmação de surto.</p>
+
+{% include "alertas/_mensagens.html" %}
+
+<ul class="kpis">
+    <li class="novo"><strong>{{ contadores.novo }}</strong><span>Novos</span></li>
+    <li class="em_investigacao"><strong>{{ contadores.em_investigacao }}</strong><span>Em investigação</span></li>
+    <li class="encerrado"><strong>{{ contadores.encerrado }}</strong><span>Encerrados</span></li>
+</ul>
+
+<form method="get" class="filtros" aria-label="Filtros de alertas">
+    {% for campo in form %}
+    <div class="campo"><label for="{{ campo.id_for_label }}">{{ campo.label }}</label>{{ campo }}</div>
+    {% endfor %}
+    <button type="submit">Filtrar</button>
+</form>
+{% if form.errors %}
+<div class="erro" role="alert"><ul>{% for campo, erros in form.errors.items %}{% for erro in erros %}<li>{{ erro }}</li>{% endfor %}{% endfor %}</ul></div>
+{% endif %}
+
+{% for a in pagina %}
+<article class="alerta-card {{ a.situacao }}{% if a.substituido %} substituido{% endif %}">
+    <div class="linha">
+        <strong><a href="{% url 'alertas:detalhe' a.pk %}">{{ a.rotulo_semana }} · {{ a.agravo_nome }} · {{ a.municipio_nome }}</a></strong>
+        <span>
+            <span class="selo {{ a.situacao }}">{{ a.rotulo_situacao }}</span>
+            {% if a.substituido %}<span class="selo substituido" title="Substituído por reprocessamento">Substituído</span>{% endif %}
+        </span>
+    </div>
+    <div class="valores">
+        observado <strong>{{ a.observado }}</strong> · média móvel {{ a.media|decimal_br }} · limite excedido {{ a.limite|decimal_br }}
+    </div>
+</article>
+{% empty %}
+<p class="aviso" role="status">Nenhum alerta para os filtros selecionados.</p>
+{% endfor %}
+
+{% if pagina.paginator.num_pages > 1 %}
+<p>
+    {% if pagina.has_previous %}<a href="?{{ querystring }}&amp;pagina={{ pagina.previous_page_number }}">‹ Anterior</a>{% endif %}
+    Página {{ pagina.number }} de {{ pagina.paginator.num_pages }}
+    {% if pagina.has_next %}<a href="?{{ querystring }}&amp;pagina={{ pagina.next_page_number }}">Próxima ›</a>{% endif %}
+</p>
+{% endif %}
+{% endblock %}
