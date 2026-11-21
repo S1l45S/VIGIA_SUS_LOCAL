@@ -64,6 +64,7 @@ def test_altera_situacao_registra_data_hora_e_usuario(banco_limpo, anomalia, ges
 
 def test_historico_e_de_acrescimo(banco_limpo, anomalia, gestor):
     a, _ = emitir_alerta(anomalia())
+    a.refresh_from_db()  # o MongoDB guarda datetime em milissegundos
     primeiro = a.historico[0].em
     a = alterar_situacao(alerta_id=a.pk, nova_situacao="encerrado", versao_lida=1, usuario=gestor)
     assert a.historico[0].em == primeiro and a.historico[0].origem == "sistema"

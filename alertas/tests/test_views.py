@@ -26,7 +26,8 @@ def test_painel_exibe_campos_do_alerta(cliente_logado, banco_limpo, anomalia):
 
 
 def test_painel_filtra_por_municipio_e_agravo(cliente_logado, criar_serie, anomalia):
-    criar_serie([1] * 3)  # só para criar o catálogo
+    criar_serie([1] * 3)  # catálogo de Dengue (A90) e Aracaju
+    criar_serie([1] * 3, agravo=("B01", "Varicela"))  # o filtro só aceita agravos do catálogo
     emitir_alerta(anomalia())
     emitir_alerta(anomalia(agravo_codigo="B01", agravo_nome="Varicela"))
     r = cliente_logado.get(reverse("alertas:painel"), {"agravo": "B01"})
